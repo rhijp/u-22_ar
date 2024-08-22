@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Internal Camera Test</title>
+    <title>External Camera Test</title>
 </head>
 <body>
-    <video id="internalCamera" autoplay playsinline></video>
+    <video id="externalCamera" autoplay playsinline></video>
 
     <script>
-        const internalConstraints = {
-            video: { facingMode: "user" } // 内カメラを指定
+        const externalConstraints = {
+            video: { facingMode: { exact: "environment" } } // 外カメラを指定
         };
 
-        async function startInternalCamera() {
+        async function startExternalCamera() {
             try {
-                const internalStream = await navigator.mediaDevices.getUserMedia(internalConstraints);
-                const internalCamera = document.getElementById('internalCamera');
-                internalCamera.srcObject = internalStream;
+                const externalStream = await navigator.mediaDevices.getUserMedia(externalConstraints);
+                const externalCamera = document.getElementById('externalCamera');
+                externalCamera.srcObject = externalStream;
             } catch (error) {
-                console.error("内カメラの取得に失敗しました:", error);
+                console.error("外カメラの取得に失敗しました:", error);
             }
         }
 
-        startInternalCamera();
+        startExternalCamera();
     </script>
 </body>
 </html>
