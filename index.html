@@ -3,27 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>External Camera Test</title>
+    <title>Camera Debugging</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+        }
+        video {
+            width: 100px;
+            height: 100px;
+            border: 2px solid white;
+            margin: 10px;
+        }
+    </style>
 </head>
 <body>
+    <!-- カメラ映像を表示するビデオタグ -->
+    <video id="internalCamera" autoplay playsinline></video>
     <video id="externalCamera" autoplay playsinline></video>
 
+    <!-- JavaScriptコードをここに追加 -->
     <script>
+        const internalConstraints = {
+            video: { facingMode: "user" } // 内カメラを指定
+        };
+
         const externalConstraints = {
             video: { facingMode: { exact: "environment" } } // 外カメラを指定
         };
 
-        async function startExternalCamera() {
+        async function startCameras() {
             try {
+                console.log("カメラを取得中...");
+
+                // 内カメラのストリームを取得
+                const internalStream = await navigator.mediaDevices.getUserMedia(internalConstraints);
+                console.log("内カメラのストリーム: ", internalStream);
+                const internalCamera = document.getElementById('internalCamera');
+                internalCamera.srcObject = internalStream;
+
+                // 外カメラのストリームを取得
                 const externalStream = await navigator.mediaDevices.getUserMedia(externalConstraints);
+                console.log("外カメラのストリーム: ", externalStream);
                 const externalCamera = document.getElementById('externalCamera');
                 externalCamera.srcObject = externalStream;
+
             } catch (error) {
-                console.error("外カメラの取得に失敗しました:", error);
+                console.error("カメラの取得に失敗しました:", error);
             }
         }
 
-        startExternalCamera();
+        // カメラのストリーム取得を開始
+        startCameras();
     </script>
 </body>
 </html>
