@@ -1,23 +1,13 @@
-const externalCamera = document.getElementById('externalCamera');
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-
-const externalConstraints = {
-    video: { facingMode: { exact: "environment" } } // 外カメラを指定
-};
-
-const internalConstraints = {
-    video: { facingMode: "user" } // 内カメラを指定
-};
-
 async function startCameras() {
     try {
         // 外カメラの映像を取得して表示
         const externalStream = await navigator.mediaDevices.getUserMedia(externalConstraints);
+        console.log('外カメラのストリームを取得しました:', externalStream);
         externalCamera.srcObject = externalStream;
 
         // 内カメラの映像を取得
         const internalStream = await navigator.mediaDevices.getUserMedia(internalConstraints);
+        console.log('内カメラのストリームを取得しました:', internalStream);
         const internalCamera = document.createElement('video');
         internalCamera.srcObject = internalStream;
         internalCamera.play();
@@ -35,13 +25,3 @@ async function startCameras() {
         console.error("カメラの取得に失敗しました:", error);
     }
 }
-
-function draw(internalCamera) {
-    // 内カメラの映像をキャンバスに描画
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(internalCamera, 0, 0, canvas.width, canvas.height);
-    requestAnimationFrame(() => draw(internalCamera));
-}
-
-// カメラを開始
-startCameras();
