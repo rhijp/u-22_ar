@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camera Debugging</title>
+    <title>AR Running Game</title>
     <style>
         body, html {
             margin: 0;
@@ -16,52 +16,29 @@
             align-items: center;
             background-color: black;
         }
-        video {
-            width: 100px;
-            height: 100px;
-            border: 2px solid white;
-            margin: 10px;
+        #externalCamera {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
         }
     </style>
 </head>
 <body>
-    <!-- カメラ映像を表示するビデオタグ -->
-    <video id="internalCamera" autoplay playsinline></video>
     <video id="externalCamera" autoplay playsinline></video>
+    <canvas id="canvas"></canvas>
 
-    <!-- JavaScriptコードをここに追加 -->
-    <script>
-        const internalConstraints = {
-            video: { facingMode: "user" } // 内カメラを指定
-        };
-
-        const externalConstraints = {
-            video: { facingMode: { exact: "environment" } } // 外カメラを指定
-        };
-
-        async function startCameras() {
-            try {
-                console.log("カメラを取得中...");
-
-                // 内カメラのストリームを取得
-                const internalStream = await navigator.mediaDevices.getUserMedia(internalConstraints);
-                console.log("内カメラのストリーム: ", internalStream);
-                const internalCamera = document.getElementById('internalCamera');
-                internalCamera.srcObject = internalStream;
-
-                // 外カメラのストリームを取得
-                const externalStream = await navigator.mediaDevices.getUserMedia(externalConstraints);
-                console.log("外カメラのストリーム: ", externalStream);
-                const externalCamera = document.getElementById('externalCamera');
-                externalCamera.srcObject = externalStream;
-
-            } catch (error) {
-                console.error("カメラの取得に失敗しました:", error);
-            }
-        }
-
-        // カメラのストリーム取得を開始
-        startCameras();
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
+    <script src="script.js"></script>
 </body>
 </html>
